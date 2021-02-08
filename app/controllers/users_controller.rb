@@ -4,13 +4,20 @@ class UsersController < ApplicationController
   before_action :admin_user,      only:  [:destroy]
 
   def index
-    @users = User.paginate(page: params[:page]) # @users = User.paginate (page: params[:page], per_page: 10, order: 'name ASC'
-                                                # This will show 10 results per page.
-                                                # User.all
+    # V1
+    # @users = User.paginate (page: params[:page], per_page: 10, order: 'name ASC'
+    # This will show 10 results per page.
+    # User.all
+    # V2
+    # @users = User.paginate(page: params[:page])
+    # V3 (p580)
+    @users = User.where(activated: true).paginate(page: params[:page])
+
   end
 
   def show
     @user = User.find(params[:id])
+    redirect_to root_url and return unless @user.activated?
   end
 
   def new
@@ -20,7 +27,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      UserMailer.account_activation(@user).deliver_now
+      @user.send_activation_email # UserMailer.account_activation(@user).deliver_now
       flash[:info] = "Please check your email to activate yourr account."
       redirect_to root_url
       # log_in @user
