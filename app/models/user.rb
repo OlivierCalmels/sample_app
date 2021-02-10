@@ -45,6 +45,7 @@ class User < ApplicationRecord
     update_attribute(:remember_digest, nil)
   end
 
+  # Activate an account
   def activate
     update_columns( activated: true,             # update_attribute(:activated, true)
                     activated_at: Time.zone.now) # update_attribute(:activated_at, Time.zone.now)
