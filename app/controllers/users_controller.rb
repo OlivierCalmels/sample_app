@@ -12,7 +12,6 @@ class UsersController < ApplicationController
     # @users = User.paginate(page: params[:page])
     # V3 (p580)
     @users = User.where(activated: true).paginate(page: params[:page])
-
   end
 
   def show
