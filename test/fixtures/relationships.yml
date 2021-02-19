@@ -12,8 +12,4 @@ three:
 
 four:
   follower: archer
-<<<<<<< HEAD
   followed: michael
-=======
-  followed: michael
->>>>>>> 6bbf02b... Add user Following with utlimate feed version

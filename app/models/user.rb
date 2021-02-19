@@ -96,7 +96,6 @@ class User < ApplicationRecord
     # V5 (p780) => :w
     part_of_feed = "relationships.follower_id = :id or microposts.user_id = :id"
     Micropost.joins(user: :followers).where(part_of_feed, { id: id })
-<<<<<<< HEAD
   end
 
   # Follows a user
@@ -112,8 +111,6 @@ class User < ApplicationRecord
   # Returns true if the current user is following the other user
   def following?(other_user)
     following.include?(other_user)
-=======
->>>>>>> 6bbf02b... Add user Following with utlimate feed version
   end
 
   # Follows a user
