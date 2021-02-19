@@ -82,10 +82,20 @@ class User < ApplicationRecord
     reset_sent_at < 2.hour.ago
   end
 
-  # Defines a proto-feed
   # See "Following users" for the full implementation
   def feed
-    Micropost.where("user_id = ?", id)
+    # V1        => Micropost.where("user_id = ?", id)
+    # V2(p773)  => Micropost.where("user_id IN (?) OR user_id = ?", following_ids, id)
+    # V3 (p775) => Micropost.where("user_id IN (:following_ids) OR user_id = :user_id",
+                  # following_ids: following_ids, user_id: id)
+    # V4 (p776) => :
+    # following_ids =   "SELECT followed_id FROM relationships
+                      # WHERE follower_id = :user_id"
+    # Micropost.where("user_id IN (#{following_ids})
+                    # OR user_id = :user_id", user_id: id)
+    # V5 (p780) => :w
+    part_of_feed = "relationships.follower_id = :id or microposts.user_id = :id"
+    Micropost.joins(user: :followers).where(part_of_feed, { id: id })
   end
 
   # Follows a user
