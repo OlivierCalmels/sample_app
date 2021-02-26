@@ -31,22 +31,24 @@ User.create!( name: "Example User",
   end
 
 # Generate microposts for a subset of users
+
 users = User.order(:created_at).take(99)
 # 50.times do
 #   content = Faker::Lorem.sentence(word_count: 5)
 #   users.each { |user| p user.microposts.create!(content: content) }
 # end
 
-20.times do
-  users.each do user
-    content = Faker::Lorem.sentence(word_count: 5)
-    p user.microposts.create!(content: content) }
+50.times do
+  content = Faker::Lorem.sentence(word_count: 5)
+  users.each { |user| p user.microposts.create!(content: content) }
 end
 
 # Create following relationships
 users = User.all
 user = users.first
 following = users[2..50]
+
 followers = users[20..83]
+
 following.each { |followed| user.follow(followed) }
 followers.each { |follower| follower.follow(user) }
